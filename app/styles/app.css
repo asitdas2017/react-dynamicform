@@ -1,0 +1,32 @@
+form {
+    width: 500px;
+    margin: 0 auto;
+}
+form .formGroup{
+    width: 100%;
+    margin: 0px 0 8px 0;
+}
+form .formGroup label{
+    width: 100%;
+    display: block;
+    padding: 5px 0;
+    margin: 0;
+}
+form .formGroup input:not([type="radio"]):not([type="checkbox"]) {
+    display: block;
+    padding: 5px 10px;
+    border: 1px solid #c0c0c0;
+    color: #666;
+    border-radius: 0;
+    width: 100%;
+    line-height: 26px;
+}
+form .formGroup select{
+    display: block;
+    padding: 5px 10px;
+    border: 1px solid #c0c0c0;
+    color: #666;
+    border-radius: 0;
+    width: 100%;
+    line-height: 26px;
+}

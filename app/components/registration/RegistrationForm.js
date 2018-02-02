@@ -1,116 +1,113 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
+import Input from './../ui-elements/Input';
 
 export default class RegistrationForm extends Component {
-    
+
     constructor(props) {
         super(props);
         this.state = {
-            firstName: "",
-            firstNameError:"",
-            lastName: "",
-            userName: "",
-            email: "",
-            password: ""
+            orderForm: {
+                name: {
+                    elementType: "input",
+                    elementLabel: "First name",
+                    elementConfig: {
+                        type: "text",
+                        placeholder: "Enter your name..."                        
+                    },
+                    value: ""
+                },
+                email: {
+                    elementType: "input",
+                    elementLabel: "Email Address",
+                    elementConfig: {
+                        type: "email",
+                        placeholder: "Enter your email..."
+                    },
+                    value: ""
+                },
+                street: {
+                    elementType: "input",
+                    elementLabel: "Street Address",
+                    elementConfig: {
+                        type: "text",
+                        placeholder: "Enter your road address.."
+                    },
+                    value: ""
+                },
+                zipcode: {
+                    elementType: "input",
+                    elementLabel: "Zip Code",
+                    elementConfig: {
+                        type: "text",
+                        placeholder: "Enter your zip code..."
+                    },
+                    value: ""
+                },
+                country: {
+                    elementType: "select",
+                    elementLabel: "Country",
+                    elementConfig: {
+                        options: [
+                            { value: "india", displayValue: "India" },
+                            { value: "usa", displayValue: "United State of America" }
+                        ]
+                    },
+                    value: ""
+                }
+            }
         };
     }
-    formValidation = () => {
-        //console.log(this.state.firstName);
-        if(this.state.firstName.length < 5){
-            this.props.errorText(this.state.firstNameError);
-            console.log(this.state.firstName);
-            return false;
-        }
-    }
-    handleBlur = (e) => {
-        /*this.setState({
-          touched: { ...this.state.touched, [field]: true },
-        });*/
-        this.formValidation();
-        //console.log(this.state.firstName);
-    }
-    handleChange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        });
-        this.props.onChange({
-            [e.target.name]: e.target.value
-        });
-    };
-    handleSubmit = (e) => {
+    submitHandler = (e) => {
         e.preventDefault();
-        this.formValidation();
-        //console.log(this.state);
-        //this.props.onSubmit(this.state);
-        this.setState({
-            firstName: "",
-            lastName: "",
-            userName: "",
-            email: "",
-            password: ""
-        });
+        const formData = {};
+        for (let key in this.state.orderForm){
+            formData[key] = this.state.orderForm[key].value;
+        }
+        console.log(formData);
     };
 
+    inputChangeHandler = (e, inputIdentifire) => {
+        const updatedStateOrderForm = {
+            ...this.state.orderForm
+        }
+        const updatedStateOrderFormElement = {
+            ...updatedStateOrderForm[inputIdentifire]
+        }
+
+        updatedStateOrderFormElement.value = e.target.value;
+        updatedStateOrderForm[inputIdentifire] = updatedStateOrderFormElement;
+
+        this.setState({
+            orderForm: updatedStateOrderForm
+        })
+        //[e.target.name]: e.target.value
+    }
+
     render() {
+        const formElementsArray = [];
+        for (let key in this.state.orderForm) {
+            formElementsArray.push({
+                id: key,
+                keySide: this.state.orderForm[key]
+            });
+        }
         return (
-            <div className="container">
+            <div className="container asit">
                 <form>
                     <div className="row">
-                        <div className="form-group col-lg-6">
-                            <TextField
-                                name="firstName"
-                                hintText="Please enter your first name"
-                                floatingLabelText="First name"
-                                value={this.state.firstName}
-                                onChange={e => this.handleChange(e)}
-                                onBlur={e => this.handleBlur(e)}
-                                errorText={this.state.firstNameError}
-                            />
-                        </div>
-                        <div className="form-group col-lg-6">
-                            <TextField
-                                name="lastName"
-                                hintText="Please enter your Last name"
-                                floatingLabelText="Last name"
-                                value={this.state.lastName}
-                                onChange={e => this.handleChange(e)}
-                                errorText=""
-                            />
-                        </div>
-                        <div className="form-group col-lg-6">
-                            <TextField
-                                name="userName"
-                                hintText="Please enter your user name"
-                                floatingLabelText="User name"
-                                value={this.state.userName}
-                                onChange={e => this.handleChange(e)}
-                                errorText=""
-                            />
-                        </div>
-                        <div className="form-group col-lg-6">
-                            <TextField
-                                name="email"
-                                hintText="Please enter your email address"
-                                floatingLabelText="Email address"
-                                value={this.state.email}
-                                onChange={e => this.handleChange(e)}
-                                errorText=""
-                            />
-                        </div>
-                        <div className="form-group col-lg-6">
-                            <TextField
-                                name="password"
-                                hintText="Please enter your password"
-                                type="password"
-                                floatingLabelText="Password"
-                                value={this.state.password}
-                                onChange={e => this.handleChange(e)}
-                                errorText=""
-                            />
-                        </div>
-                        <div className="form-group col-md-12">
-                            <button onClick={e => this.handleSubmit(e)} className="btn btn-primary">Submit</button>
-                        </div>
+                            {
+                                formElementsArray.map(formElement => (
+                                    <Input
+                                        key={formElement.id}
+                                        elementLabel={formElement.keySide.elementLabel}
+                                        elementType={formElement.keySide.elementType}
+                                        elementConfig={formElement.keySide.elementConfig}
+                                        value={formElement.keySide.value}
+                                        elementChange={(e) => this.inputChangeHandler(e, formElement.id)} />
+                                ))
+                            }
+                        <button onClick={this.submitHandler} className="btn btn-primary">Submit</button>
                     </div>
                 </form>
             </div>

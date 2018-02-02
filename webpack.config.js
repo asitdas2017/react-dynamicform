@@ -7,13 +7,20 @@ module.exports = {
         filename: 'bundle.js'
     },
     module: {
-        loaders: [{
-            test: /\.js$/,
-            loader: 'babel-loader',
-            exclude: /node_modules/,
-            query: {
-                presets: ['env', 'stage-2', 'react']
+        loaders: [
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/,
+                query: {
+                    presets: ['env', 'stage-2', 'react']
+                }
+            },
+            {
+                test: /\.css$/,
+                loader: ['style-loader', 'css-loader']
             }
-        }]
+
+        ]
     }
 }
