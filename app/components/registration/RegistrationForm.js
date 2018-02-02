@@ -49,8 +49,9 @@ export default class RegistrationForm extends Component {
                     elementLabel: "Country",
                     elementConfig: {
                         options: [
-                            { value: "india", displayValue: "India" },
-                            { value: "usa", displayValue: "United State of America" }
+                            {value: null, displayValue: "Select your country" },
+                            {value: "india", displayValue: "India" },
+                            {value: "usa", displayValue: "United State of America" }
                         ]
                     },
                     value: ""
