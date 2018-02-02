@@ -1,0 +1,37 @@
+{
+  "name": "react-dynamicform",
+  "version": "1.0.0",
+  "description": "React dynamic form with custom validation",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run build",
+    "build": "webpack-dev-server --hot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asitdas2017/react-dynamicform.git"
+  },
+  "author": "Asit D",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/asitdas2017/react-dynamicform/issues"
+  },
+  "homepage": "https://github.com/asitdas2017/react-dynamicform#readme",
+  "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-jsx": "^1.0.0",
+    "react-router": "^4.2.0",
+    "semantic-ui-react": "^0.77.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "material-ui": "^0.20.0",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.1"
+  }
+}
