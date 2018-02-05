@@ -1,7 +1,6 @@
 import React from "react";
 
 const Input = (props) => {
-    console.log(props);
     let inputElement = null;
 
     switch (props.elementType){

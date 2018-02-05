@@ -15,7 +15,20 @@ export default class RegistrationForm extends Component {
                         type: "text",
                         placeholder: "Enter your name..."                        
                     },
-                    value: ""
+                    value: "",
+                    valid: false,
+                    validation: {
+                        rules: {
+                            required: true,
+                            minLength: 3
+                        },
+                        errors: {
+                            required: "Name field is mandatory",
+                            minLength: "Minimum characters is required"
+                        }
+                    },
+                    touched: false,
+                    validationError: "asit"
                 },
                 email: {
                     elementType: "input",
@@ -24,7 +37,20 @@ export default class RegistrationForm extends Component {
                         type: "email",
                         placeholder: "Enter your email..."
                     },
-                    value: ""
+                    value: "",
+                    valid: false,
+                    validation: {
+                        rules: {
+                            required: true,
+                            pattern: /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i
+                        },
+                        errors: {
+                            required: "Email field is mandatory",
+                            pattern: "Please enter proper email format"
+                        }                        
+                    },
+                    touched: false,
+                    validationError: ""
                 },
                 street: {
                     elementType: "input",
@@ -33,7 +59,20 @@ export default class RegistrationForm extends Component {
                         type: "text",
                         placeholder: "Enter your road address.."
                     },
-                    value: ""
+                    value: "",
+                    valid: false,
+                    validation: {
+                        rules: {
+                            required: true,
+                            minLength: 3
+                        },
+                        errors: {
+                            required: "Address is mandatory",
+                            minLength: "Minimum characters is required"
+                        }
+                    },
+                    touched: false,
+                    validationError: ""
                 },
                 zipcode: {
                     elementType: "input",
@@ -42,7 +81,22 @@ export default class RegistrationForm extends Component {
                         type: "text",
                         placeholder: "Enter your zip code..."
                     },
-                    value: ""
+                    value: "",
+                    valid: false,
+                    validation: {
+                        rules: {
+                            required: true,
+                            minLength: 3,
+                            pattern: /^([0-9_-]){5,9}$/
+                        },
+                        errors: {
+                            required: "Name field is mandatory",
+                            minLength: "Minimum characters is required",
+                            pattern: "Please enter proper zipcode"
+                        }
+                    },
+                    touched: false,
+                    validationError: ""
                 },
                 country: {
                     elementType: "select",
@@ -54,18 +108,41 @@ export default class RegistrationForm extends Component {
                             {value: "usa", displayValue: "United State of America" }
                         ]
                     },
-                    value: ""
+                    value: "",
+                    valid: false,
+                    validation: {
+                        required: true
+                    },
+                    touched: false,
+                    validationError: ""
                 }
+            },
+            errorForm: {
+                emptyError: "Its required field",
+                formatError: "The value of the format is not correct"
             }
         };
     }
+
+    validationHandler = (value, validationRules) =>{
+        let isValid = true; 
+        console.log(validationRules);
+        if (validationRules.rules.required){
+            isValid = value.trim() !== '' && isValid;
+        }
+        if(validationRules.rules.pattern){
+            isValid = validationRules.rules.pattern.test(value) && isValid;
+        }
+        return isValid;
+    }
+
     submitHandler = (e) => {
         e.preventDefault();
         const formData = {};
         for (let key in this.state.orderForm){
             formData[key] = this.state.orderForm[key].value;
         }
-        console.log(formData);
+        //console.log(formData);
     };
 
     inputChangeHandler = (e, inputIdentifire) => {
@@ -77,8 +154,10 @@ export default class RegistrationForm extends Component {
         }
 
         updatedStateOrderFormElement.value = e.target.value;
+        updatedStateOrderFormElement.valid = this.validationHandler(updatedStateOrderFormElement.value, updatedStateOrderFormElement.validation);
+        //updatedStateOrderFormElement.error = 
         updatedStateOrderForm[inputIdentifire] = updatedStateOrderFormElement;
-
+        //console.log(updatedStateOrderFormElement.valid);
         this.setState({
             orderForm: updatedStateOrderForm
         })
@@ -93,9 +172,10 @@ export default class RegistrationForm extends Component {
                 keySide: this.state.orderForm[key]
             });
         }
+        //console.log(formElementsArray);
         return (
             <div className="container asit">
-                <form>
+                <form onSubmit={this.submitHandler}>
                     <div className="row">
                             {
                                 formElementsArray.map(formElement => (
@@ -108,7 +188,7 @@ export default class RegistrationForm extends Component {
                                         elementChange={(e) => this.inputChangeHandler(e, formElement.id)} />
                                 ))
                             }
-                        <button onClick={this.submitHandler} className="btn btn-primary">Submit</button>
+                        <button className="btn btn-primary">Submit</button>
                     </div>
                 </form>
             </div>
