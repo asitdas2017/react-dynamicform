@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import Input from './../ui-elements/Input';
 
@@ -13,22 +13,24 @@ export default class RegistrationForm extends Component {
                     elementLabel: "First name",
                     elementConfig: {
                         type: "text",
-                        placeholder: "Enter your name..."                        
+                        placeholder: "Enter your name..."
                     },
                     value: "",
                     valid: false,
                     validation: {
                         rules: {
                             required: true,
-                            minLength: 3
+                            minLength: 3,
+                            maxLength: 6
                         },
                         errors: {
                             required: "Name field is mandatory",
-                            minLength: "Minimum characters is required"
-                        }
+                            minLength: "Minimum characters is required",
+                            maxLength: "Maximum"
+                        },
+                        setError: ""
                     },
-                    touched: false,
-                    validationError: "asit"
+                    touched: false
                 },
                 email: {
                     elementType: "input",
@@ -47,10 +49,10 @@ export default class RegistrationForm extends Component {
                         errors: {
                             required: "Email field is mandatory",
                             pattern: "Please enter proper email format"
-                        }                        
+                        },
+                        setError: ""
                     },
-                    touched: false,
-                    validationError: ""
+                    touched: false
                 },
                 street: {
                     elementType: "input",
@@ -69,10 +71,10 @@ export default class RegistrationForm extends Component {
                         errors: {
                             required: "Address is mandatory",
                             minLength: "Minimum characters is required"
-                        }
+                        },
+                        setError: ""
                     },
-                    touched: false,
-                    validationError: ""
+                    touched: false
                 },
                 zipcode: {
                     elementType: "input",
@@ -93,45 +95,59 @@ export default class RegistrationForm extends Component {
                             required: "Name field is mandatory",
                             minLength: "Minimum characters is required",
                             pattern: "Please enter proper zipcode"
-                        }
+                        },
+                        setError: ""
                     },
-                    touched: false,
-                    validationError: ""
+                    touched: false
                 },
                 country: {
                     elementType: "select",
                     elementLabel: "Country",
                     elementConfig: {
                         options: [
-                            {value: null, displayValue: "Select your country" },
-                            {value: "india", displayValue: "India" },
-                            {value: "usa", displayValue: "United State of America" }
+                            {
+                                value: null,
+                                displayValue: "Select your country"
+                            }, {
+                                value: "india",
+                                displayValue: "India"
+                            }, {
+                                value: "usa",
+                                displayValue: "United State of America"
+                            }
                         ]
                     },
                     value: "",
                     valid: false,
                     validation: {
-                        required: true
+                        rules: {
+                            required: true
+                        },
+                        errors: {
+                            required: "Please select the country from the dropdown"
+                        },
+                        setError: ""
                     },
-                    touched: false,
-                    validationError: ""
+                    touched: false
                 }
-            },
-            errorForm: {
-                emptyError: "Its required field",
-                formatError: "The value of the format is not correct"
             }
         };
     }
 
-    validationHandler = (value, validationRules) =>{
-        let isValid = true; 
-        console.log(validationRules);
-        if (validationRules.rules.required){
+    validationHandler = (value, validationRules) => {
+        let isValid = true;
+
+        if (validationRules.rules.required) {
             isValid = value.trim() !== '' && isValid;
+            validationRules.setError = (isValid) ? "" : validationRules.errors.required
         }
-        if(validationRules.rules.pattern){
+        if (validationRules.rules.minLength) {
+            isValid = value.length >= validationRules.rules.minLength && isValid;
+            validationRules.setError = (isValid) ? "" : validationRules.errors.minLength
+        }
+        if (validationRules.rules.pattern) {
             isValid = validationRules.rules.pattern.test(value) && isValid;
+            validationRules.setError = (isValid) ? "" : validationRules.errors.pattern
         }
         return isValid;
     }
@@ -139,7 +155,7 @@ export default class RegistrationForm extends Component {
     submitHandler = (e) => {
         e.preventDefault();
         const formData = {};
-        for (let key in this.state.orderForm){
+        for (let key in this.state.orderForm) {
             formData[key] = this.state.orderForm[key].value;
         }
         //console.log(formData);
@@ -155,43 +171,49 @@ export default class RegistrationForm extends Component {
 
         updatedStateOrderFormElement.value = e.target.value;
         updatedStateOrderFormElement.valid = this.validationHandler(updatedStateOrderFormElement.value, updatedStateOrderFormElement.validation);
-        //updatedStateOrderFormElement.error = 
         updatedStateOrderForm[inputIdentifire] = updatedStateOrderFormElement;
-        //console.log(updatedStateOrderFormElement.valid);
         this.setState({
             orderForm: updatedStateOrderForm
         })
-        //[e.target.name]: e.target.value
-    }
+        // console.log(updatedStateOrderForm);
 
+    }
+    blurHandler = (e, inputIdentifire) => {
+        const updatedStateOrderForm = {
+            ...this.state.orderForm
+        }
+        const updatedStateOrderFormElement = {
+            ...updatedStateOrderForm[inputIdentifire]
+        }
+        updatedStateOrderFormElement.valid = this.validationHandler(updatedStateOrderFormElement.value, updatedStateOrderFormElement.validation);
+        updatedStateOrderForm[inputIdentifire] = updatedStateOrderFormElement;
+        this.setState({
+            orderForm: updatedStateOrderForm
+        })
+        console.log(inputIdentifire);
+    }
     render() {
         const formElementsArray = [];
         for (let key in this.state.orderForm) {
             formElementsArray.push({
-                id: key,
+                id: key, 
                 keySide: this.state.orderForm[key]
             });
         }
         //console.log(formElementsArray);
         return (
-            <div className="container asit">
-                <form onSubmit={this.submitHandler}>
-                    <div className="row">
-                            {
-                                formElementsArray.map(formElement => (
-                                    <Input
-                                        key={formElement.id}
-                                        elementLabel={formElement.keySide.elementLabel}
-                                        elementType={formElement.keySide.elementType}
-                                        elementConfig={formElement.keySide.elementConfig}
-                                        value={formElement.keySide.value}
-                                        elementChange={(e) => this.inputChangeHandler(e, formElement.id)} />
-                                ))
-                            }
-                        <button className="btn btn-primary">Submit</button>
-                    </div>
-                </form>
-            </div>
+            <form onSubmit={this.submitHandler}>
+                {formElementsArray.map(formElement => (<Input
+                    key={formElement.id}
+                    elementLabel={formElement.keySide.elementLabel}
+                    elementType={formElement.keySide.elementType}
+                    elementConfig={formElement.keySide.elementConfig}
+                    value={formElement.keySide.value}
+                    elementError={formElement.keySide.validation.setError}
+                    elementChange={(e) => this.inputChangeHandler(e, formElement.id)}
+                    elementBlur={(e) => this.blurHandler(e, formElement.id)}/>))}
+                <button className="btn btn-primary">Submit</button>
+            </form>
         )
     }
 }

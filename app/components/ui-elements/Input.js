@@ -8,7 +8,8 @@ const Input = (props) => {
             inputElement = <input 
                 {...props.elementConfig} 
                 value={props.value} 
-                onChange={props.elementChange} />;
+                onChange={props.elementChange}
+                onBlur={props.elementBlur} />;
             break;
         case ('textarea'): 
             inputElement = <textarea 
@@ -38,6 +39,7 @@ const Input = (props) => {
         <div className="formGroup">
             <label>{props.elementLabel}:</label>
             {inputElement}
+            <span>{props.elementError}</span>
         </div>
     )
 }
