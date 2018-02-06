@@ -7,7 +7,7 @@ export default class Registration extends Component {
             <div className="row">
                 <div className="col-lg-8"><RegistrationForm/></div>
                 <div className="col-lg-4">
-                    <div class="sidebar-module sidebar-module-inset">
+                    <div className="sidebar-module sidebar-module-inset">
                         <h4>About</h4>
                         <p>Etiam porta
                             <em>sem malesuada magna</em>

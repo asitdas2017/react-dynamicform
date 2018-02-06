@@ -9,7 +9,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Registration from "./components/registration/Registration";
 import css from "./styles/app.css";
 
-
 class HelloWorld extends React.Component {
     render() {
         return (

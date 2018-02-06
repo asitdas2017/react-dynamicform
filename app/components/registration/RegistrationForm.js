@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import Input from './../ui-elements/Input';
+import db_firebase from "./../database/db_firebase";
 
 export default class RegistrationForm extends Component {
 
@@ -20,13 +21,11 @@ export default class RegistrationForm extends Component {
                     validation: {
                         rules: {
                             required: true,
-                            minLength: 3,
-                            maxLength: 6
+                            minLength: 3
                         },
                         errors: {
                             required: "Name field is mandatory",
-                            minLength: "Minimum characters is required",
-                            maxLength: "Maximum"
+                            minLength: "Minimum 3 characters is required"
                         },
                         setError: ""
                     },
@@ -44,7 +43,7 @@ export default class RegistrationForm extends Component {
                     validation: {
                         rules: {
                             required: true,
-                            pattern: /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i
+                            pattern: /^[\w._-]+[+]?[\w._-]+@[\w.-]+\.[a-zA-Z]{2,6}$/
                         },
                         errors: {
                             required: "Email field is mandatory",
@@ -66,11 +65,11 @@ export default class RegistrationForm extends Component {
                     validation: {
                         rules: {
                             required: true,
-                            minLength: 3
+                            minLength: 8
                         },
                         errors: {
                             required: "Address is mandatory",
-                            minLength: "Minimum characters is required"
+                            minLength: "Minimum 8 characters is required"
                         },
                         setError: ""
                     },
@@ -105,20 +104,17 @@ export default class RegistrationForm extends Component {
                     elementLabel: "Country",
                     elementConfig: {
                         options: [
-                            {
-                                value: null,
-                                displayValue: "Select your country"
-                            }, {
-                                value: "india",
-                                displayValue: "India"
-                            }, {
-                                value: "usa",
-                                displayValue: "United State of America"
-                            }
+                            {value: null, displayValue: "Select your country"}, 
+                            {value: "india", displayValue: "India"}, 
+                            {value: "usa", displayValue: "United State of America"},
+                            {value: "canada", displayValue: "Canada"},
+                            {value: "australia", displayValue: "Australia"},
+                            {value: "uk", displayValue: "United Kingdom"},
+                            {value: "europe", displayValue: "Europe"}
                         ]
                     },
                     value: "",
-                    valid: false,
+                    valid: true,
                     validation: {
                         rules: {
                             required: true
@@ -130,8 +126,20 @@ export default class RegistrationForm extends Component {
                     },
                     touched: false
                 }
-            }
+            },
+            formIsValid: false,
+            speed: 10
         };
+    }
+
+    componentDidMount(){        
+        const rootRef = db_firebase.database().ref().child('react');
+        const speedRef = rootRef.child('speed');
+        speedRef.on('value', snap => {
+            this.setState({
+                speed: snap.val()
+            })
+        })
     }
 
     validationHandler = (value, validationRules) => {
@@ -158,10 +166,14 @@ export default class RegistrationForm extends Component {
         for (let key in this.state.orderForm) {
             formData[key] = this.state.orderForm[key].value;
         }
+        db_firebase.database().ref().child('orderForm').push(formData).then(() => {
+            alert("Successfully stored the data")
+        });
         //console.log(formData);
+        //this.props.history.push('/fetchdata');
     };
 
-    inputChangeHandler = (e, inputIdentifire) => {
+    changeHandler = (e, inputIdentifire, elementTouch) => {
         const updatedStateOrderForm = {
             ...this.state.orderForm
         }
@@ -170,15 +182,22 @@ export default class RegistrationForm extends Component {
         }
 
         updatedStateOrderFormElement.value = e.target.value;
-        updatedStateOrderFormElement.valid = this.validationHandler(updatedStateOrderFormElement.value, updatedStateOrderFormElement.validation);
+        if (elementTouch){
+            updatedStateOrderFormElement.valid = this.validationHandler(updatedStateOrderFormElement.value, updatedStateOrderFormElement.validation);
+        }
         updatedStateOrderForm[inputIdentifire] = updatedStateOrderFormElement;
-        this.setState({
-            orderForm: updatedStateOrderForm
-        })
-        // console.log(updatedStateOrderForm);
 
+        let formIsValid = true;
+        for(let inputIdentifire in updatedStateOrderForm){
+            formIsValid = updatedStateOrderForm[inputIdentifire].valid && formIsValid;
+        }
+
+        this.setState({
+            orderForm: updatedStateOrderForm,
+            formIsValid: formIsValid
+        })
     }
-    blurHandler = (e, inputIdentifire) => {
+    blurHandler = (e, inputIdentifire, elementTouch) => {
         const updatedStateOrderForm = {
             ...this.state.orderForm
         }
@@ -186,11 +205,12 @@ export default class RegistrationForm extends Component {
             ...updatedStateOrderForm[inputIdentifire]
         }
         updatedStateOrderFormElement.valid = this.validationHandler(updatedStateOrderFormElement.value, updatedStateOrderFormElement.validation);
+        updatedStateOrderFormElement.touched = true;
         updatedStateOrderForm[inputIdentifire] = updatedStateOrderFormElement;
         this.setState({
             orderForm: updatedStateOrderForm
         })
-        console.log(inputIdentifire);
+        //console.log(updatedStateOrderForm);
     }
     render() {
         const formElementsArray = [];
@@ -209,10 +229,14 @@ export default class RegistrationForm extends Component {
                     elementType={formElement.keySide.elementType}
                     elementConfig={formElement.keySide.elementConfig}
                     value={formElement.keySide.value}
+                    touched={formElement.keySide.touched}
+                    inValid={!formElement.keySide.valid}
                     elementError={formElement.keySide.validation.setError}
-                    elementChange={(e) => this.inputChangeHandler(e, formElement.id)}
-                    elementBlur={(e) => this.blurHandler(e, formElement.id)}/>))}
-                <button className="btn btn-primary">Submit</button>
+                    elementChange={(e) => this.changeHandler(e, formElement.id, formElement.keySide.touched)}
+                    elementBlur={(e) => this.blurHandler(e, formElement.id, formElement.keySide.touched)} />
+                ))}
+                <button className="btn btn-primary" disabled={!this.state.formIsValid}>Submit</button>
+                <span> valid: {JSON.stringify(this.state.formIsValid, null, 2)}</span>
             </form>
         )
     }

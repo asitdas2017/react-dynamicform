@@ -36,10 +36,10 @@ const Input = (props) => {
     }
 
     return (
-        <div className="formGroup">
+        <div className="formGroup has-error" className={props.touched && props.inValid ? 'formGroup has-error' : 'formGroup'}>
             <label>{props.elementLabel}:</label>
             {inputElement}
-            <span>{props.elementError}</span>
+            <span className="help-block">{props.elementError}</span>
         </div>
     )
 }

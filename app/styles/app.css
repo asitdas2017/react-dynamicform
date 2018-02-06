@@ -30,3 +30,14 @@ form .formGroup select{
     width: 100%;
     height: 36px;
 }
+
+form .formGroup.has-error > input:not([type="radio"]):not([type="checkbox"]),
+form .formGroup.has-error > select{
+    border: 1px solid #a94442;
+}
+form .formGroup .help-block{
+    display: none;
+}
+form .formGroup.has-error .help-block{
+    display: block;
+}
