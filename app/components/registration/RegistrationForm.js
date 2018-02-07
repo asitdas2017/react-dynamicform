@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import Input from './../ui-elements/Input';
 import db_firebase from "./../database/db_firebase";
+import { Redirect, browserHistory } from 'react-router';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 export default class RegistrationForm extends Component {
 
@@ -128,7 +130,8 @@ export default class RegistrationForm extends Component {
                 }
             },
             formIsValid: false,
-            speed: 10
+            fireRedirect: false
+
         };
     }
 
@@ -167,10 +170,10 @@ export default class RegistrationForm extends Component {
             formData[key] = this.state.orderForm[key].value;
         }
         db_firebase.database().ref().child('orderForm').push(formData).then(() => {
-            alert("Successfully stored the data")
+           alert("Successfully stored the data");
+           this.setState({ fireRedirect: true })         
         });
         //console.log(formData);
-        //this.props.history.push('/fetchdata');
     };
 
     changeHandler = (e, inputIdentifire, elementTouch) => {
@@ -214,6 +217,7 @@ export default class RegistrationForm extends Component {
     }
     render() {
         const formElementsArray = [];
+        const { fireRedirect } = this.state;
         for (let key in this.state.orderForm) {
             formElementsArray.push({
                 id: key, 
@@ -237,6 +241,9 @@ export default class RegistrationForm extends Component {
                 ))}
                 <button className="btn btn-primary" disabled={!this.state.formIsValid}>Submit</button>
                 <span> valid: {JSON.stringify(this.state.formIsValid, null, 2)}</span>
+                {fireRedirect && (
+                    <Redirect to={'/dashboard'}/>
+                )}
             </form>
         )
     }
