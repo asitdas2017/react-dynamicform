@@ -45,7 +45,7 @@ export default class CoustomValidationForm extends Component {
                     validation: {
                         rules: {
                             required: true,
-                            pattern: /^[\w._-]+[+]?[\w._-]+@[\w.-]+\.[a-zA-Z]{2,6}$/
+                            pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
                         },
                         errors: {
                             required: "Email field is mandatory",
@@ -134,7 +134,7 @@ export default class CoustomValidationForm extends Component {
 
         };
     }
-
+    /*
     componentDidMount(){        
         const rootRef = db_firebase.database().ref().child('react');
         const speedRef = rootRef.child('speed');
@@ -144,7 +144,7 @@ export default class CoustomValidationForm extends Component {
             })
         })
     }
-
+    */
     validationHandler = (value, validationRules) => {
         let isValid = true;
 
@@ -242,7 +242,7 @@ export default class CoustomValidationForm extends Component {
                 <button className="btn btn-primary" disabled={!this.state.formIsValid}>Submit</button>
                 <span> {JSON.stringify(this.state.formIsValid, null, 2)}</span>
                 {fireRedirect && (
-                    <Redirect to={'/dashboard'}/>
+                    <Redirect to={'/'}/>
                 )}
             </form>
         )
