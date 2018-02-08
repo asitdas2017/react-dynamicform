@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 class TopHeaderNav extends Component {
     state = {}
@@ -11,13 +11,13 @@ class TopHeaderNav extends Component {
                     <div className="navbar-collapse collapse" id="navbar">
                         <ul className="nav navbar-nav navbar-right">
                             <li>
-                                <Link to='/'>Default</Link>
-                            </li>
-                            <li className="active">
-                                <Link to='/registration'>current</Link>
+                                <NavLink to='/' activeClassName="selected">Home</NavLink>
                             </li>
                             <li>
-                                <Link to='/dashboard'>Fixed</Link>
+                                <NavLink to='/custom' activeClassName="selected">Custom Validation</NavLink>
+                            </li>
+                            <li>
+                                <NavLink to='/redux' activeClassName="selected">Redux Validation</NavLink>
                             </li>
                         </ul>
                     </div>

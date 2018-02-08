@@ -5,7 +5,7 @@ import db_firebase from "./../database/db_firebase";
 import { Redirect, browserHistory } from 'react-router';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-export default class RegistrationForm extends Component {
+export default class CoustomValidationForm extends Component {
 
     constructor(props) {
         super(props);
@@ -76,31 +76,7 @@ export default class RegistrationForm extends Component {
                         setError: ""
                     },
                     touched: false
-                },
-                zipcode: {
-                    elementType: "input",
-                    elementLabel: "Zip Code",
-                    elementConfig: {
-                        type: "text",
-                        placeholder: "Enter your zip code..."
-                    },
-                    value: "",
-                    valid: false,
-                    validation: {
-                        rules: {
-                            required: true,
-                            minLength: 3,
-                            pattern: /^([0-9_-]){5,9}$/
-                        },
-                        errors: {
-                            required: "Name field is mandatory",
-                            minLength: "Minimum characters is required",
-                            pattern: "Please enter proper zipcode"
-                        },
-                        setError: ""
-                    },
-                    touched: false
-                },
+                },                
                 country: {
                     elementType: "select",
                     elementLabel: "Country",
@@ -123,6 +99,30 @@ export default class RegistrationForm extends Component {
                         },
                         errors: {
                             required: "Please select the country from the dropdown"
+                        },
+                        setError: ""
+                    },
+                    touched: false
+                },
+                zipcode: {
+                    elementType: "input",
+                    elementLabel: "Zip Code",
+                    elementConfig: {
+                        type: "text",
+                        placeholder: "Enter your zip code..."
+                    },
+                    value: "",
+                    valid: false,
+                    validation: {
+                        rules: {
+                            required: true,
+                            minLength: 3,
+                            pattern: /^([0-9_-]){5,9}$/
+                        },
+                        errors: {
+                            required: "Name field is mandatory",
+                            minLength: "Minimum characters is required",
+                            pattern: "Please enter proper zipcode"
                         },
                         setError: ""
                     },
@@ -240,7 +240,7 @@ export default class RegistrationForm extends Component {
                     elementBlur={(e) => this.blurHandler(e, formElement.id, formElement.keySide.touched)} />
                 ))}
                 <button className="btn btn-primary" disabled={!this.state.formIsValid}>Submit</button>
-                <span> valid: {JSON.stringify(this.state.formIsValid, null, 2)}</span>
+                <span> {JSON.stringify(this.state.formIsValid, null, 2)}</span>
                 {fireRedirect && (
                     <Redirect to={'/dashboard'}/>
                 )}
