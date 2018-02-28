@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
-import Input from './../ui-elements/Input';
+import InputFields from './InputFields';
 import db_firebase from "./../database/db_firebase";
 import { Redirect, browserHistory } from 'react-router';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
@@ -227,7 +227,7 @@ export default class CoustomValidationForm extends Component {
         //console.log(formElementsArray);
         return (
             <form onSubmit={this.submitHandler}>
-                {formElementsArray.map(formElement => (<Input
+                {formElementsArray.map(formElement => (<InputFields
                     key={formElement.id}
                     elementLabel={formElement.keySide.elementLabel}
                     elementType={formElement.keySide.elementType}

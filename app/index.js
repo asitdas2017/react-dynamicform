@@ -11,6 +11,7 @@ import TopHeaderNav from './components/navigations/TopHeaderNav';
 import Home from "./components/home/Home";
 import CustomValidation from "./components/validation-custom/CustomValidation";
 import ReduxValidation from "./components/validation-redux/ReduxValidation";
+import NodemailerEmail from "./components/validation-material-nodemailer/NodemailerEmail";
 import css from "./styles/app.css";
 
 class App extends React.Component {
@@ -25,6 +26,7 @@ class App extends React.Component {
                                 <Route exact path="/" component={Home} />
                                 <Route path="/custom" component={CustomValidation} />
                                 <Route path="/redux" component={ReduxValidation} />
+                                <Route path="/email" component={NodemailerEmail} />
                             </Switch>
                         </div>
                     </div>

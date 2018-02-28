@@ -50,7 +50,7 @@ class CustomValidation extends Component {
                             mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia
                             bibendum nulla sed consectetur.</p>
 
-                        <table class="table table-striped">
+                        <table className="table table-striped">
                             <thead>
                                 <tr>
                                     <th>Name</th>
