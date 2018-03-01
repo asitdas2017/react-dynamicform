@@ -7,7 +7,8 @@ class CustomValidation extends Component {
     constructor(props){
         super(props);
         this.state = {
-            db_data: []
+            db_data: [],
+            isLoading: true
         }
     }
 
@@ -25,7 +26,8 @@ class CustomValidation extends Component {
                         zipcode: data.val().zipcode
                 });                
                 this.setState({
-                    db_data: db_data
+                    db_data: db_data,
+                    isLoading: false
                 })
             })
         })        
@@ -45,8 +47,7 @@ class CustomValidation extends Component {
                 <div className="col-lg-7">
                     <div className="sidebar-module sidebar-module-inset">
                         <h4>Custom Validation : With dynamic properties</h4>
-                        <p>Etiam porta
-                            <em>sem malesuada magna</em>
+                        <p>Etiam porta sem malesuada magna
                             mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia
                             bibendum nulla sed consectetur.</p>
 
@@ -61,15 +62,18 @@ class CustomValidation extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-                            {dataListArray.map(dataElement => (
-                                <tr key={dataElement.id} className="dataList">
-                                    <td>{dataElement.keyValue.name}</td>
-                                    <td>{dataElement.keyValue.email}</td>
-                                    <td>{dataElement.keyValue.street}</td>
-                                    <td>{dataElement.keyValue.country}</td>
-                                    <td>{dataElement.keyValue.zipcode}</td>
-                                </tr>
-                            ))}
+                            
+                            {this.state.isLoading ? <tr className="loading"><td colSpan="5">Loading...</td></tr> : 
+                                dataListArray.map(dataElement => (
+                                    <tr key={dataElement.id} className="dataList">                                        
+                                        <td>{dataElement.keyValue.name}</td>
+                                        <td>{dataElement.keyValue.email}</td>
+                                        <td>{dataElement.keyValue.street}</td>
+                                        <td>{dataElement.keyValue.country}</td>
+                                        <td>{dataElement.keyValue.zipcode}</td>
+                                    </tr>
+                                ))
+                            }
                         </tbody>
                     </table>
                     </div>

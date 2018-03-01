@@ -44,3 +44,12 @@ form .formGroup .help-block{
 form .formGroup.has-error .help-block{
     display: block;
 }
+
+
+.table-striped>tbody>tr.loading{
+    background-color: transparent;
+}
+.table-striped>tbody>tr.loading td{
+    text-align: center;
+    padding: 50px 0;
+}
